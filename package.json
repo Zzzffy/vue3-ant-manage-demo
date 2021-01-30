@@ -10,6 +10,7 @@
     "ant-design-vue": "^2.0.0-rc.9",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-i18n": "^8.22.4",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
@@ -19,8 +20,10 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "file-loader": "^6.2.0",
     "sass": "^1.26.5",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "url-loader": "^4.1.1"
   },
   "browserslist": [
     "> 1%",
