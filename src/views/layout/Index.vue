@@ -1,11 +1,12 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <Sider />
+      <!-- 父传子：通过“:自定义名称 = 要传过去的值” -->
+      <Sider :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0">
-        <Header />
+        <Header @handleCollapsed="handleCollapsed" />
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
         <Content />
@@ -19,7 +20,9 @@
   import Sider from './index/Sider'
   import Content from './index/Content'
   import {
-    reactive, toRefs
+    getCurrentInstance,
+    reactive,
+    toRefs
   } from 'vue'
   export default {
     name: 'Index',
@@ -29,14 +32,21 @@
       Content
     },
     setup() {
-     
+      const {
+        ctx
+      } = getCurrentInstance()
       const data = reactive({
         selectedKeys: ['1'],
         collapsed: false,
       })
+
+      const handleCollapsed = (value) => {
+        data.collapsed = value.status
+      }
       return {
         ...toRefs(data),
-       
+        handleCollapsed
+
       }
     }
   }

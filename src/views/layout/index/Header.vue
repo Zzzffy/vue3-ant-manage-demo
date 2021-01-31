@@ -1,5 +1,7 @@
 <template>
   <div id="header">
+    <menu-unfold-outlined v-if="data.collapsed" class="trigger" @click="handleCollapsed" />
+    <menu-fold-outlined v-else class="trigger" @click="handleCollapsed" />
     <a-dropdown :trigger="['click']">
       <a class="ant-dropdown-link me" @click="e => e.preventDefault()">
         <img src="../../../assets/me.png" style="width: 30px" />
@@ -26,8 +28,38 @@
 </template>
 
 <script>
+  import {
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+  } from '@ant-design/icons-vue';
+  import {
+    getCurrentInstance,
+    reactive
+  } from 'vue'
   export default {
-    name: 'Header'
+    name: 'Header',
+    components: {
+      MenuFoldOutlined,
+      MenuUnfoldOutlined
+    },
+    setup() {
+      const {
+        ctx
+      } = getCurrentInstance()
+      const data = reactive({
+        collapsed: false
+      })
+      const handleCollapsed = () => {
+        data.collapsed = !data.collapsed;
+        // 子传父
+        ctx.$emit('handleCollapsed', {'status': data.collapsed})
+      }
+
+      return {
+        data,
+        handleCollapsed
+      }
+    }
 
   }
 </script>

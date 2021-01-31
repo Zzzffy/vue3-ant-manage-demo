@@ -1,9 +1,9 @@
 <template>
   <h1 id="logo">
-    <img :src="logoPath" alt="">
+    <img :src="logoPath" alt="" :class="{'width-60': collapsed }">
   </h1>
   <a-menu v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys" mode="inline" theme="dark"
-    @click="getSelected">
+    @click="getSelected" @openChange="getOpened">
     <!-- template不会被真实渲染出来，相当于占位符。这里使用它是为了将v-for和v-if分开 -->
     <template v-for="item in routes">
       <template v-if="!item.hidden">
@@ -12,6 +12,7 @@
 
           <router-link :to="item.path">
             {{item.meta && item.meta.title}}
+
           </router-link>
 
         </a-menu-item>
@@ -45,13 +46,19 @@
 
   export default {
     name: 'Sider',
+    props: {
+      collapsed: {
+        type: Boolean,
+        default: false
+      }
+    },
     setup() {
       // 获取所有的路由
       const routes = useRouter().options.routes;
       console.log(routes);
       const data = reactive({
-        selectedKeys: ['/index'],
-        openKeys: [''],
+        selectedKeys: sessionStorage.getItem("selectedKeys") ? [sessionStorage.getItem("selectedKeys")] : [],
+        openKeys: sessionStorage.getItem("openKeys") ? JSON.parse(sessionStorage.getItem("openKeys")) : [],
         logoPath: require('../../../assets/images/school_logo.png')
 
       })
@@ -60,14 +67,21 @@
         key,
         keyPath
       }) => {
-        console.log(item);
-        console.log(key);
-        console.log(keyPath);
+        data.selectedKeys = [key]
+        sessionStorage.setItem("selectedKeys", key)
+      }
+
+      const getOpened = (keys) => {
+        console.log(keys);
+        data.openKeys = keys
+        sessionStorage.setItem("openKeys", JSON.stringify(keys))
+
       }
       return {
         ...toRefs(data),
         routes,
-        getSelected
+        getSelected,
+        getOpened
       }
     }
 
@@ -75,10 +89,13 @@
 </script>
 
 <style scoped>
-#logo {
-  margin: 10px 0;
-}
-#logo img {
-  width: 90%;
-}
+  #logo {
+    margin: 10px 0;
+  }
+
+  #logo img {
+    width: 90%;
+  }
+
+  .width-60 {}
 </style>
