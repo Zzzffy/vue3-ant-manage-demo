@@ -5,7 +5,7 @@
       <a-form-item ref="name" label="用户名" name="username">
         <a-input v-model:value="loginInfo.username" />
       </a-form-item>
-      <a-form-item label="密码" name="password" >
+      <a-form-item label="密码" name="password">
         <a-input v-model:value="loginInfo.password" type="password" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 13, offset: 5 }">
@@ -34,6 +34,9 @@
     toRefs,
     getCurrentInstance
   } from 'vue'
+  import {
+    getCode
+  } from '../../api/account.js'
   export default {
     name: 'Login',
     setup() {
@@ -74,6 +77,8 @@
           .validate()
           .then(() => {
             console.log('success');
+            getCode();
+
           })
           .catch(error => {
             console.log('error', error);
